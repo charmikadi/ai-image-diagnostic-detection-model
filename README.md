@@ -183,15 +183,3 @@ model = load_model(model, 'model.pth', device='cuda')
 ## License
 
 Open source and available for research and educational purposes.
-
-## Contributing
-
-Contributions, issues, and feature requests are welcome!
-
-## Contact
-
-For questions or support, please open an issue on the repository.
-
----
-
-**Note**: This model is intended for research and educational purposes. For clinical applications, ensure proper validation, regulatory compliance, and thorough testing. The model is designed to support clinicians, not replace clinical judgment.
