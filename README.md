@@ -136,8 +136,27 @@ The training process includes:
 - Overall accuracy
 - Per-class precision, recall, F1-score, and support
 - Classification report with detailed metrics
+- ROC curves for multi-class classification (One-vs-Rest approach)
+- Confusion matrix visualization
+- Per-class performance metrics plots
 
 Critical for evaluating early-stage detection while minimizing false negatives.
+
+### ROC Curve Visualization
+
+For multi-class classification, use the enhanced evaluation script with ROC curve visualization:
+
+```bash
+cd src
+python evaluate_with_viz.py
+```
+
+This generates:
+- ROC curves for each class (meningioma, pituitary, glioma, no tumor)
+- Micro and macro-averaged ROC curves
+- AUC scores for each class
+- Confusion matrix
+- Per-class performance metrics
 
 ## Model Performance
 
@@ -177,5 +196,7 @@ model = load_model(model, 'model.pth', device='cuda')
 - **model.py**: ResNet18 architecture with transfer learning
 - **train.py**: Training loop with optimization
 - **evaluate.py**: Metrics computation (precision, recall, F1-score, support)
+- **visualize_metrics.py**: ROC curve visualization, confusion matrix, and performance plots
+- **evaluate_with_viz.py**: Enhanced evaluation script with visualization
 - **utils.py**: Model I/O functions
 - **main.py**: Training pipeline entry point
