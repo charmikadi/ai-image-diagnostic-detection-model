@@ -13,6 +13,8 @@ End-to-end machine learning pipeline for early-stage brain tumor detection and c
 - **Transfer Learning**: Pre-trained ResNet18 with fine-tuning and hyperparameter optimization
 - **Data Augmentation**: Rotation, flipping, and contrast adjustments for improved robustness
 - **Comprehensive Metrics**: Precision, recall, F1-score, and support for thorough evaluation
+- **Model Interpretability**: GradCAM visualization showing which image regions influence predictions
+- **Interactive Web Demo**: Streamlit application for easy inference and visualization
 - **GPU Support**: Automatic GPU detection and utilization
 - **Colab Integration**: Jupyter notebook for easy experimentation
 
@@ -26,8 +28,13 @@ ai-image-diagnostic-detection-model/
 │   ├── model.py           # ResNet18 architecture
 │   ├── train.py           # Training function
 │   ├── evaluate.py        # Model evaluation
+│   ├── evaluate_with_viz.py  # Enhanced evaluation with visualizations
 │   ├── main.py            # Main training script
-│   └── utils.py           # Model I/O utilities
+│   ├── utils.py           # Model I/O utilities
+│   ├── visualize_metrics.py  # ROC curves and confusion matrices
+│   └── gradcam.py         # GradCAM visualization for interpretability
+├── app.py                 # Streamlit web application
+├── requirements.txt       # Python dependencies
 ├── Trained_model_HSOC.ipynb  # Colab training notebook
 └── trained_model_hsoc.py     # Trained model script
 ```
@@ -41,20 +48,36 @@ ai-image-diagnostic-detection-model/
 
 ### Dependencies
 
+Install all required packages:
+
 ```bash
-pip install torch torchvision pillow matplotlib seaborn scikit-learn pandas numpy
+pip install -r requirements.txt
+```
+
+Or install manually:
+
+```bash
+pip install torch torchvision pillow matplotlib seaborn scikit-learn pandas numpy streamlit
 ```
 
 ## Dataset Structure
 
-### Processed with CSV
+The model requires data organized as follows:
+
 ```
 brain-images/
 └── Processed/
     ├── Training/
+    │   └── [image files]
     ├── Testing/
-    └── image_labels.csv  # filename, label, split
+    │   └── [image files]
+    └── image_labels.csv  # Required: columns are filename, label, split
 ```
+
+The `image_labels.csv` file must contain:
+- `filename`: Name of the image file
+- `label`: Class label (meningioma, pituitary, glioma, notumor)
+- `split`: Either "training" or "testing"
 
 ## Configuration
 
@@ -74,6 +97,26 @@ num_classes = 4
 ```
 
 ## Usage
+
+### Web Application Demo (Streamlit)
+
+Launch the interactive web application with GradCAM visualization:
+
+```bash
+streamlit run app.py
+```
+
+The app will open in your browser where you can:
+- Upload brain MRI images
+- Get real-time predictions with confidence scores
+- View GradCAM heatmaps showing model attention
+- See class probabilities for all tumor types
+
+**Features:**
+- Interactive image upload
+- Real-time inference
+- Model interpretability with GradCAM
+- Class probability visualization
 
 ### Local Training
 
@@ -146,6 +189,43 @@ This generates:
 - Confusion matrix
 - Per-class performance metrics
 
+### GradCAM Visualization
+
+For model interpretability, use GradCAM to visualize which regions of the image the model focuses on:
+
+```python
+from src.gradcam import visualize_gradcam
+from src.model import get_resnet_model
+from src.utils import load_model
+from PIL import Image
+import torchvision.transforms as transforms
+from config import device, image_size
+
+# Load model and image
+model = get_resnet_model(num_classes=4)
+model = load_model(model, 'model.pth', device)
+image = Image.open('path/to/image.jpg')
+
+# Create transform
+transform = transforms.Compose([
+    transforms.Resize(image_size),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.5]*3, std=[0.5]*3)
+])
+
+# Generate GradCAM visualization
+visualize_gradcam(
+    model, 
+    image, 
+    transform, 
+    device, 
+    class_names=['glioma', 'meningioma', 'notumor', 'pituitary'],
+    save_path='gradcam_visualization.png'
+)
+```
+
+The GradCAM visualization is also integrated into the Streamlit web application for interactive use.
+
 ## Model Performance
 
 - Training samples: ~5,700 images
@@ -186,5 +266,7 @@ model = load_model(model, 'model.pth', device='cuda')
 - **evaluate.py**: Metrics computation (precision, recall, F1-score, support)
 - **visualize_metrics.py**: ROC curve visualization, confusion matrix, and performance plots
 - **evaluate_with_viz.py**: Enhanced evaluation script with visualization
+- **gradcam.py**: GradCAM implementation for model interpretability and attention visualization
+- **app.py**: Streamlit web application for interactive inference and visualization
 - **utils.py**: Model I/O functions
 - **main.py**: Training pipeline entry point
