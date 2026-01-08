@@ -179,7 +179,3 @@ model = load_model(model, 'model.pth', device='cuda')
 - **evaluate.py**: Metrics computation (precision, recall, F1-score, support)
 - **utils.py**: Model I/O functions
 - **main.py**: Training pipeline entry point
-
-## License
-
-Open source and available for research and educational purposes.
