@@ -47,19 +47,7 @@ pip install torch torchvision pillow matplotlib seaborn scikit-learn pandas nump
 
 ## Dataset Structure
 
-### Option 1: Directory Structure
-```
-brain-images/
-├── Training/
-│   ├── meningioma/
-│   ├── pituitary/
-│   ├── glioma/
-│   └── notumor/
-└── Testing/
-    └── [same structure]
-```
-
-### Option 2: Processed with CSV
+### Processed with CSV
 ```
 brain-images/
 └── Processed/
