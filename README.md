@@ -4,7 +4,7 @@ A deep learning model for automated brain MRI image classification, designed to 
 
 ## Overview
 
-End-to-end machine learning pipeline for early-stage brain tumor detection and classification using PyTorch. The model assists clinicians in the diagnostic process by automatically categorizing brain MRI scans, emphasizing robustness, transparency, and alignment with clinical needs.
+End-to-end machine learning pipeline for early-stage brain tumor detection and classification using PyTorch. The model assists clinicians in the diagnostic process by automatically categorizing brain MRI scans.
 
 ### Key Features
 
@@ -243,17 +243,6 @@ from src.model import get_resnet_model
 model = get_resnet_model(num_classes=4)
 model = load_model(model, 'model.pth', device='cuda')
 ```
-
-## Methodology
-
-1. Literature review on AI in medical imaging
-2. Dataset exploration and preprocessing (resizing, normalization)
-3. Data augmentation (rotation, flipping, contrast adjustments)
-4. Exploratory data analysis and label validation
-5. Model selection and transfer learning
-6. Training with hyperparameter tuning
-7. Comprehensive evaluation using multiple metrics
-8. Iterative optimization for improved generalization
 
 ## Development
 
